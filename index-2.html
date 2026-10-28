@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>المهارات التطبيقية لتدبر القرآن الكريم — مخطط تفاعلي</title>
+<meta name="description" content="مخطط تفاعلي للمفاتيح العشرين لتدبر القرآن الكريم، بحسب أ.د. سليمان الدقور.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#07130f; --ink2:#0d2019; --paper:#f2ead8; --muted:#a9b8ae; --gold:#d9b45a;
+  --serif:'Amiri','Traditional Arabic',serif; --sans:'Tajawal',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font-family:var(--sans); color:var(--paper); min-height:100vh;
+  background:
+    radial-gradient(1200px 700px at 78% 30%, #0f3a30 0%, transparent 60%),
+    radial-gradient(900px 600px at 10% 90%, #1a2a3f 0%, transparent 60%),
+    var(--ink);
+}
+a{color:var(--gold)}
+button{font-family:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:6px}
+
+header{padding:28px clamp(16px,4vw,48px) 8px;display:flex;flex-wrap:wrap;gap:16px 32px;align-items:end;justify-content:space-between}
+h1{font-family:var(--serif);font-size:clamp(28px,4.4vw,52px);line-height:1.15;margin:0;font-weight:700}
+.byline{margin:6px 0 0;color:var(--muted);font-size:15px}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.search{position:relative}
+.search input{
+  width:min(280px,72vw);padding:11px 16px;border-radius:999px;border:1px solid #2c4a3f;
+  background:#0b1b16;color:var(--paper);font:inherit;font-size:15px
+}
+.search input::placeholder{color:#7f948a}
+.btn{padding:10px 18px;border-radius:999px;border:1px solid #2c4a3f;background:#0b1b16;font-size:15px;transition:background .2s,border-color .2s}
+.btn:hover{background:#13302a;border-color:var(--gold)}
+.btn[aria-pressed="true"]{background:var(--gold);color:#1b1405;border-color:var(--gold)}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:8px clamp(16px,4vw,48px) 0}
+.chip{
+  --h:170; display:inline-flex;gap:8px;align-items:center;padding:7px 14px;border-radius:999px;font-size:14px;
+  border:1px solid hsl(var(--h) 45% 38%); background:hsl(var(--h) 45% 14%);
+}
+.chip i{width:10px;height:10px;border-radius:50%;background:hsl(var(--h) 65% 55%)}
+.chip:hover,.chip.on{background:hsl(var(--h) 45% 24%)}
+
+.app{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);gap:clamp(12px,3vw,40px);padding:12px clamp(8px,3vw,40px) 40px;align-items:start}
+.stage{position:relative;width:100%;max-width:860px;margin-inline:auto;aspect-ratio:1}
+svg{width:100%;height:100%;display:block;overflow:visible}
+
+/* wheel */
+.seg{cursor:pointer;animation:pop .8s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i,0)*28ms);transition:opacity .3s}
+.seg path{stroke:#07130f;stroke-width:1.2;transition:filter .2s,fill .2s}
+.r1 path{fill:hsl(var(--h) 52% 31%)}
+.r2 path{fill:hsl(var(--h) 46% 21%)}
+.r3 path{fill:hsl(var(--h) 34% 14%)}
+.seg:hover path{filter:brightness(1.45)}
+.seg.sel path{stroke:var(--gold);stroke-width:3;filter:brightness(1.7)}
+.seg.faded{opacity:.5}
+.seg.dim{opacity:.16}
+.seg text{pointer-events:none;fill:var(--paper);font-family:var(--sans);text-anchor:middle;dominant-baseline:central}
+.seg .t-name{font-family:var(--serif);font-weight:700}
+.seg .t-num{font-family:var(--serif);font-weight:700}
+.seg .t-sm{fill:#d3e0d6}
+.vdot{fill:var(--gold);opacity:0;transition:opacity .3s;pointer-events:none}
+.vdot.on{opacity:1}
+#core{cursor:pointer}
+#core circle.disc{fill:#050b09;stroke:var(--gold);stroke-width:2}
+#core:hover circle.disc{fill:#0e1d17}
+#core text{fill:var(--paper);text-anchor:middle;pointer-events:none}
+.orbit{fill:none;stroke:var(--gold);stroke-opacity:.35;stroke-dasharray:2 12;stroke-linecap:round;transform-origin:500px 500px;animation:spin 240s linear infinite}
+@keyframes pop{from{opacity:0;transform:scale(.92)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* panel */
+.panel{
+  position:sticky;top:16px;border:1px solid #24413a;border-radius:22px;padding:clamp(18px,2.4vw,30px);
+  background:linear-gradient(160deg,#0f2a22cc,#08140fee);backdrop-filter:blur(6px);min-height:320px;max-height:calc(100vh - 32px);overflow:auto;
+}
+.panel > div{animation:slide .35s ease}
+@keyframes slide{from{opacity:0;transform:translateY(8px)}}
+.kicker{display:inline-flex;gap:8px;align-items:center;font-size:14px;color:var(--muted)}
+.kicker i{width:10px;height:10px;border-radius:50%;background:hsl(var(--h,170) 65% 55%)}
+.panel h2{font-family:var(--serif);font-size:clamp(26px,3vw,36px);margin:10px 0 14px;line-height:1.25}
+.panel .text{font-size:clamp(18px,1.9vw,21px);line-height:2;margin:0 0 18px;font-weight:500}
+.panel h3{font-size:14px;color:var(--muted);margin:18px 0 8px;font-weight:500}
+.surahs{display:flex;flex-wrap:wrap;gap:6px}
+.surahs span{padding:4px 12px;border-radius:999px;font-size:14.5px;background:hsl(var(--h,170) 35% 17%);border:1px solid hsl(var(--h,170) 35% 30%)}
+.svs{display:grid;gap:10px}
+.sv{padding:12px 15px;border-radius:14px;background:hsl(var(--h,170) 35% 13%);border:1px solid hsl(var(--h,170) 35% 26%)}
+.sv b{font-family:var(--serif);font-size:19px;color:var(--gold)}
+.sv p{margin:4px 0 0;line-height:1.95;font-size:16.5px}
+.brand{display:flex;gap:16px;align-items:center}
+.author{width:76px;height:76px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);flex:none}
+.nav{display:flex;gap:10px;margin-top:22px}
+.nav .btn{flex:1}
+.klist{display:grid;gap:8px;margin-top:6px}
+.klist button{
+  text-align:start;display:flex;gap:12px;align-items:baseline;padding:11px 14px;border-radius:12px;
+  border:1px solid #24413a;background:#0a1914;font-size:15px;line-height:1.7
+}
+.klist button:hover{border-color:var(--gold);background:#112a22}
+.klist b{font-family:var(--serif);font-size:20px;color:var(--gold);min-width:1.6em}
+.progress{color:var(--muted);font-size:14px;margin-top:20px}
+footer{padding:0 clamp(16px,4vw,48px) 36px;color:var(--muted);font-size:14px;line-height:1.9;max-width:900px}
+
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .panel{position:static;max-height:none;overflow:visible}
+}
+@media (prefers-reduced-motion:reduce){
+  .seg,.orbit,.panel > div{animation:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <img class="author" src="author.jpg" alt="أ.د. سليمان الدقور" onerror="this.remove()">
+    <div>
+    <h1>المهارات التطبيقية لتدبر القرآن الكريم</h1>
+    <p class="byline">عشرون مفتاحاً تقود إلى الصراط المستقيم · أ.د. سليمان الدقور</p>
+    </div>
+  </div>
+  <div class="tools">
+    <div class="search"><input id="q" type="search" placeholder="ابحث عن مفتاح أو سورة أو كلمة…" aria-label="بحث"></div>
+    <button class="btn" id="tour" aria-pressed="false">جولة تلقائية</button>
+  </div>
+</header>
+
+<div class="chips" id="chips"></div>
+
+<main class="app">
+  <div class="stage">
+    <svg id="wheel" viewBox="0 0 1000 1000" role="group" aria-label="مخطط المفاتيح العشرين"></svg>
+  </div>
+  <aside class="panel" id="panel" aria-live="polite"></aside>
+</main>
+
+<footer>
+  المحتوى العلمي للمخطط الأصلي «المهارات التطبيقية لتدبر القرآن الكريم» لصاحبه أ.د. سليمان الدقور، وقيم السور مأخوذة من كتابه. وهذه الصفحة تحويل تفاعلي للمخطط. 
+</footer>
+
+<script>
+const ORD = ['الأول','الثاني','الثالث','الرابع','الخامس','السادس','السابع','الثامن','التاسع','العاشر','الحادي عشر','الثاني عشر','الثالث عشر','الرابع عشر','الخامس عشر','السادس عشر','السابع عشر','الثامن عشر','التاسع عشر','العشرون'];
+
+const CENTER = {
+  title:'المفتاح المركزي — سورة الفاتحة',
+  text:'مفتاح الدخول إلى القرآن بحثاً عن معالم الصراط المستقيم: سورة الفاتحة.'
+};
+
+const GROUPS = [
+  {id:'tiwal', name:'السبع الطوال', range:'البقرة – التوبة', h:168, from:1, to:4,
+   goal:'تحقيق منهج الاستجابة والاتباع والالتزام بمواثيق الله وتشريعاته وعهوده لتحقيق الإعداد والتمكين.'},
+  {id:'miun', name:'المئين', range:'يونس – العنكبوت', h:40, from:5, to:9,
+   goal:'تحقيق منهج الهداية بالدعوة والتبليغ والحجة والبناء والإعداد وتحقيق القوة والحفظ.'},
+  {id:'mathani', name:'المثاني', range:'الروم – الحجرات', h:222, from:10, to:13,
+   goal:'تحقيق منهج التربية والبناء والاجتماع والاستمساك بالحق والثبات عليه.'},
+  {id:'mufassal', name:'المفصل', range:'ق – الناس', h:338, from:14, to:20,
+   goal:'تحقيق منهج البناء والتأصيل الإيماني وضبط السلوك والقيم والتخلق والعلاقات البينية.'}
+];
+
+const KEYS = [
+ {n:1, text:'التزام الإنسان وانضباطه بقيم الصراط المستقيم والحذر من الميل أو الخروج عنه يحقق له بناءً قوياً وتمكيناً فاعلاً.', s:['البقرة','آل عمران']},
+ {n:2, text:'تمكين الإنسان أساس لقيامه بواجبه ودوره تجاه الإنسانية وبناء المجتمع بجميع مكوناته.', s:['النساء']},
+ {n:3, text:'بناء الإنسان عهد وعقد وميثاق بينه وبين ربه، يستمده من الله ويلتزم الوفاء به.', s:['المائدة','الأنعام']},
+ {n:4, text:'بناء الإنسان يحتاج إلى تفعيل منهج الاتباع لتحقيق الإعداد والتمكين والوقاية من الخلل الذي يؤثر في أدائه لدوره.', s:['الأعراف','الأنفال','التوبة']},
+ {n:5, text:'بناء الإنسان يحتاج إلى معرفة منهج الهداية لتفعيل مقتضياتها، وتحقيق آثارها وثمارها في حياته.', s:['يونس','هود','يوسف'], w:['هود','يوسف']},
+ {n:6, text:'بناء الإنسان مرتبط بقوة ووضوح الدعوة إلى هداية الصراط المستقيم.', s:['الرعد','إبراهيم']},
+ {n:7, text:'بناء الإنسان وفق منهج الهداية هو السبيل المفضي للعمل الجمعي المنظم المثمر الذي يحقق القوة والتمكين والسعادة في الدنيا والآخرة.', s:['الحجر','النحل','الإسراء','الكهف','مريم','طه']},
+ {n:8, text:'بناء الإنسان وفق منهج الهداية إلى الصراط المستقيم يقوم على الاقتداء بالله وعلى طريق الأنبياء، وعلى صدق الغاية ووضوحها لتحقيق وعد الله تعالى بالاستخلاف والتمكين.', s:['الأنبياء','الحج','المؤمنون','النور']},
+ {n:9, text:'بناء الإنسان متصل بتحقيق أثر هذا البناء والإعداد في صناعة الفرد الصالح والمجتمع الصالح، وتجنب مظاهر الضعف والخلل التي قد تصيب هذا البناء والإعداد.', s:['الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم']},
+ {n:10, text:'بناء الإنسان يقوم على معرفة الله تعالى وحكمته والخضوع له والاستسلام لأمره والاعتراف بفضله، وذلك لتحصينه وحمايته من التآمر والعذاب.', s:['لقمان','السجدة','الأحزاب','سبأ','فاطر','يس']},
+ {n:11, text:'بناء الإنسان يقوم على استقلال في التصور، وتميز في المواقف، في صدق وإخلاص واستسلام واستقامة وثبات على الحق.', s:['الصافات','ص','الزمر','غافر','فصلت','الشورى']},
+ {n:12, text:'بناء الإنسان يستلزم وضوحاً في الرؤيا ووضوحاً في الشخصية والمواقف، وتمايزاً بين منهج الاستجابة أو الإعراض.', s:['الزخرف','الدخان','الجاثية','الأحقاف']},
+ {n:13, text:'بناء الإنسان يظهر في الاستجابة الصادقة لدعوة الحق لتحقيق آثارها وثمارها الذاتية والمجتمعية.', s:['محمد','الفتح','الحجرات']},
+ {n:14, text:'بناء الإنسان يقوم على موازين واضحة محددة منضبطة تبدأ من منهج الاستدلال لتصل إلى نتيجة ضبط الموازين بين الرفع أو الخفض وتحقيق', s:['ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة']},
+ {n:15, text:'بناء الإنسان ينعكس على إقامة مجتمعه وتحقيق قوته وتماسكه وتمكينه.', s:['الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم']},
+ {n:16, text:'بناء الإنسان هو بناء محكم يحتاج إلى خطة منظمة منضبطة واضحة وخطوات عملية في الجانب النفسي والمعرفي والسلوكي لتحقيقه وتمكينه.', s:['الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات']},
+ {n:17, text:'بناء الإنسان يقوم على ضبط توجهه وضبط عمله.', s:['النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج']},
+ {n:18, text:'بناء الإنسان قائم على معرفة نفسه في نقاط قوتها وضعفها.', s:['الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل']},
+ {n:19, text:'بناء الإنسان مشروع متكامل يتصل بجوانب شخصية الإنسان جميعها المعرفية والسلوكية والنفسية والانفعالية لتحقيق رسالته ودوره وفاعليته الإيجابية.', s:['الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة'], w:['الضحى','الشرح','التين','القدر','البينة','الزلزلة','العاديات','القارعة']},
+ {n:20, text:'بناء الإنسان يقوم على الوعي والانتباه لكل ما يلزم في تمكينه وتمكين عمله، وعلى الحذر من كل ما يشتت جهوده ويعيق عمله ويمنع من تحقيق ثمرته.', s:['التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس']}
+];
+
+const VAL = {
+"البقرة":"ضرورة استسلام الأُمَّة وخضوعها في تأدية الدور الإيمانيّ المطلوب منها، وعدم التفلّت منه.",
+"آل عمران":"تمكينُ قِيَم البناء الإيمانيّ هو ما يحقّق الثبات في المواجهة مع المخالف، سواءٌ أكانت معنويّةً أم مادّيّةً أم كلتيهما.",
+"النساء":"تحقيقُ القوّة لرفعِ الظلم ومنعِ الاستضعاف.",
+"المائدة":"الالتزامُ والوفاءُ بعقدِ اللهِ، وتنفيذُ تشريعاتِه، والطاعةُ والتَّقوى.",
+"الأنعام":"تأكيدُ أنّ الحكمَ والأمرَ جميعَه للهِ عزَّ وجلَّ، الذي تتّصفُ تشريعاتُه بالتمام والكمال والعدل.",
+"الأعراف":"الاتّباعُ سبيلٌ لتحقيق التمكين.",
+"الأنفال":"الإعدادُ الفكريّ والماديّ من أجل تحقيق التمكين.",
+"التوبة":"تمكينُ الإعداد بمعرفة أنواع الخلل المؤثّر فيه؛ في العلاقة مع الآخر، وفي العلاقة مع الذات بالصدق والتوبة والعودة.",
+"يونس":"منهجُ تحقيقِ الهدايةِ باتّباعِ الحقِّ والانتفاعِ بالإيمان.",
+"هود":"واجبُ الثباتِ والاستقامةِ عند المؤمن لتحقيق دوره.",
+"يوسف":"تمكينُ المشروع بتحويل الحلم والأفكار إلى واقع.",
+"الرعد":"تحقيقُ القوّة والوضوح والبيان لتفعيل قيمة الخضوع لله عز وجل.",
+"إبراهيم":"أنّ المهمّة التي سار عليها الأنبياء وإمامُهم إبراهيم هي الدعوة إلى الصراط المستقيم وإخراج الناس من الظلمات إلى النور.",
+"الحجر":"أنّ حفظك للصراط هو سبيلُ حفظك لنفسك.",
+"النحل":"الدعوةُ إلى تنفيذ أمر الله في الفرد والمجموع وفق قيَمٍ منظمةٍ منتجة.",
+"الإسراء":"إعدادُ الإنسان لتحقيق مشروعه في الأرض، وهو الاستخلافُ وفق منهج القرآن.",
+"الكهف":"منهجُ صناعة القوّة للانتقال بالإنسان والمجتمع من حالة الاستضعاف إلى حالة التمكين.",
+"مريم":"الوراثةُ الإيمانيّة؛ وراثةُ الدور والمسؤوليّة.",
+"طه":"تحقيقُ منهج رفع الشقاء.",
+"الأنبياء":"وجوبُ السير على خطى الأنبياء في دعوتهم وجهادهم وتبليغهم للدين، لتحقيق الهداية والعبوديّة لله.",
+"الحج":"تأكيدُ قيمة البعث في تحقيق صدق التوجّه إلى الله والسير على عبادته.",
+"المؤمنون":"تحقيق قيمة صدق الاتّباع في الواقع من خلال التقوى.",
+"النور":"تحقيق وعد الله باستخلاف المؤمنين والتمكين لهم من خلال تحقيق التربية الإيمانية.",
+"الفرقان":"صناعةُ الشخصيّة الفُرقانيّة.",
+"الشعراء":"منهجُ الوضوحِ في الدعوة إلى الله؛ قوّة البيان والحجّة والتبليغ.",
+"النمل":"الاستجابةُ للدعوة الحقّ والإيمان، وعدمُ الاستكبار عنها، اتّقاءً للعواقب.",
+"القصص":"بيانُ أثر تفاعل الإنسان مع أمر الله في سلوكه على الصراط، لتحقيق قاعدة التمكين.",
+"العنكبوت":"أنّ الأساس الذي يقوم عليه بناء المجتمعات والبيوت هو الإيمان بالله، وإذا اختلّ هذا الأساس كان البناءُ ضعيفاً واهياً.",
+"الروم":"مسيرةُ الإيمان والمواجهة بين الحقّ والباطل.",
+"لقمان":"أنّ الله يدير هذه الأمور على هذا النسق وفق الحكمة، وأننا نحتاج إلى الحكمة لتحقيق أمر الله.",
+"السجدة":"أنّ الخضوع لله مظهرٌ رئيسيّ وأساسيّ لتحقيق الهداية والإيمان واليقين.",
+"الأحزاب":"تحصين الأمّة في مواجهة الأحزاب من خلال قوّة بيتها الدّاخليّ.",
+"سبأ":"أثرُ النعمة والقُوّةِ في طاعة الله؛ وعدمُ استثمارها في طاعته يحقّقُ العذاب.",
+"فاطر":"ما ينبغي أن يستشعرهُ الإنسانُ من نِعَمِ الله وعطائه، وتمثّل رحمتهِ في هذه العطاءات.",
+"يس":"تأكيدُ وظيفةِ النبيّ في إرساله، وقيامه بدور الدعوة والإنذار، ووجوب اتّباعه والخضوع لأمر الله لتحقيق الهداية إلى الصراط المستقيم.",
+"الصافات":"بيانُ ملامح اصطفافِ النفوسِ المؤمنةِ في مقابل الصفوف غيرِ المؤمنة، وما يُبنى عليهِ من مسؤوليّةٍ وجزاء.",
+"ص":"أنّ نتيجةَ الاصطفاف وأَثَرَهُ يكونُ في انحيازِ أهلِ الحقِّ للحقِّ وأهلِ الباطلِ للباطل.",
+"الزمر":"تحقيقُ الإخلاص عند أصحاب الصفّ المؤمن، وبيانُ أثره.",
+"غافر":"وجوبُ الاستسلام لله متى قامت عليه الحجج والبيّنات، وتركُ المجادلة والمحاجّة بغير علم.",
+"فصلت":"تفصيلُ الآيات التي تُحدّد المنهج الذي يجب أن يَتّبِعَ الإنسانُ الاستقامةَ عليه.",
+"الشورى":"منهجيّةُ رفعِ أثرِ الاختلافِ وما يسبّبهُ من بغيٍ أو تعدٍّ، بالاستجابةِ لشرعِ اللهِ وتفعيلِ الشورى.",
+"الزخرف":"وجوبُ استمساكِ الإنسان بالحقّ والثباتِ عليه، مع الحذر من كلّ ما يفتنه عنه، وأخطرُها الزخرف.",
+"الدخان":"أهمية ما يفرّق الله به بين الحقّ والباطل والخير والشرّ، وبين صفّ المؤمنين وصفّ الكافرين، بسبب ما تمسّكوا به واستمسكوا.",
+"الجاثية":"أنّ وضوح الرؤية والموقف في الدنيا هو ما يحدّد موقفك أمام الله يوم القيامة.",
+"الأحقاف":"أنّ موقفَ الناس من إنذار النبيّ ﷺ والقرآن يظهر في جانبين: إمّا إعراضٌ وإمّا استجابة.",
+"محمد":"بيانُ صفاتِ من ينبغي أن يكون قادرًا على الثبات في المواجهة بين الحقّ والباطل.",
+"الفتح":"تأكدُ العطاء الذي يمنحه الله لعباده المؤمنين الذين تحقّقت فيهم الشروط المطلوبة في سورة محمد.",
+"الحجرات":"تأكيدُ أهميّة العلاقات بين أفراد المجتمع -مع الله، ومع القائد، وفيما بينهم- لبناء المجتمع وتحصينه وفق قِيمٍ إيمانيّة.",
+"ق":"منهجُ الاستدلال على أنّ الحقَّ حقٌّ وتمكينه؛ فالقرآن -مصدرُ الإيمان- قولٌ حقٌّ.",
+"الذاريات":"أنّ حركة الناس مختلفةٌ متفرّقة، وأنّ طريق الخلاص من هذا التشتّت هو الفرار إلى الله بالعبادة والطاعة لتحقيق النجاة من الهلاك.",
+"الطور":"توجيهُ المسلمين إلى السير على طريق الحقّ الذي سار عليه الأنبياء السابقون، وتجنّبُ طرق الكذب والخوض وافتراءات المفترين.",
+"النجم":"ضبطُ موازينِ الحقِّ في التَّصَوُّرات والمواقفِ والأعمال والجزاء؛ للبعدِ عن الضَّلال والغوايةِ والطُّغيان، ولتحقيقِ إخلاصِ السجودِ والعبادةِ لله.",
+"القمر":"تحريكُ الإنسانِ وتوعيتُه بإنذارهِ وتخويفِه مِن تضييعِ الموازين والإعراضِ عن السُّجود والعبادة.",
+"الرحمن":"استجلابُ رحمةِ اللهِ بإقامةِ العدلِ الذي قامَ عليهِ الوجود، وعدمِ الطغيانِ أو الانحراف، والبشارةُ لمنْ خافَ مَقامَ الرحمن.",
+"الواقعة":"أنّ مكانة الإنسان وتصنيفه في الآخرة يتحدّدان بوزن تصوّراته وسلوكيّاته وأعماله بين كفّتين: كفّة الخفض وكفّة الرّفع.",
+"الحديد":"بيانُ عناصرِ القُوَّةِ اللازمةِ لبناءِ الأمّةِ والمجتمع.",
+"المجادلة":"قوّةُ التوجّه إلى اللهِ عزّ وجلّ، وهي في حقيقتها تفعيلٌ لحقيقة الإيمان.",
+"الحشر":"قُوّةُ التّحدّي والمواجهةِ بينَ حِزْبِ اللهِ وحِزْبِ الشّيطان.",
+"الممتحنة":"أهمّيّةُ الثّباتِ على القِيمِ مطلقًا، وعلى قيمةِ الإيمانِ تحديدًا، وعلى قوّة الولاء والبراء التي هي مفاصلةٌ بين الحقّ والباطل، وبين حزب الله وحزب الشّيطان.",
+"الصف":"قوّةُ بناءِ الصّفّ المسلمِ وتشكيلِه وتنظيمِه.",
+"الجمعة":"قُوَّةُ الصَّفِّ العباديِّ الذي يُعين على بناءِ الصَّفِّ المسلم.",
+"المنافقون":"قوّةُ الحذر والاشتباه من مظاهر الضعف التي تتشكّل في المجتمع.",
+"التغابن":"الحذرُ من غياب دور الإنسان وواجبه في هذه الحياة (الغبن).",
+"الطلاق":"ضرورةُ تماسكِ الأسرة وقوةِ ترابطها لتؤدّي دورها، والحذرُ من عناصر تفكّكها.",
+"التحريم":"الحرصُ على تماسكِ الأسرة وبنائها من الداخل وفق أحكام الله.",
+"الملك":"الدعوةُ إلى وجوب تعظيم الله والخضوع إليه؛ لأنه صاحبُ المُلك والمتصرّف فيه.",
+"القلم":"الدعوةُ إلى أهميّة تفعيل معرفةِ الإنسان ليكون حكمه حكمًا صحيحًا على طريقِ الحقّ وعلى طريق الباطل.",
+"الحاقة":"وضوحُ الحقّ وإحقاقُ الله له في الدنيا والآخرة.",
+"المعارج":"أنّ معرفةَ الإنسان بنفسه وخصائصها وما يصلحها وما يفسدها هو طريقُ الارتقاء إلى ما يستحقّه من جزاء الله.",
+"نوح":"تثبيتُ الدعاة إلى الله على الدعوة ومواساتهم وتصبيرهم على تحمّل العناء والصعاب في سبيل الله.",
+"الجن":"قوّة وضوح الحقّ.",
+"المزمل":"منهجُ تربيةِ الإنسان الذي يُعينه على القيامِ بواجبه.",
+"المدثر":"واجبُ إعداد الإنسانِ نفسَه من خلال الحركةِ والعملِ.",
+"القيامة":"تقويمُ الإنسانِ لنفسه بميزانِ الآخرةِ.",
+"الإنسان":"ضرورةُ تعريفِ الإنسانِ بنفسه من أجلِ اختيارِ طريقِ هدايته.",
+"المرسلات":"وجوبُ التصديق والإيمان بالحقّ والقرآن الذي على أساسه يفترق الناس في الدنيا في إيمانهم ومواقفهم، ويفصل الله بينهم في الآخرة بين مكذّبين مجرمين ومتّقين محسنين.",
+"النبأ":"التوجيهُ لصناعةِ التوجّهِ.",
+"النازعات":"خصائصُ قوّةِ عملِ الإنسانِ.",
+"عبس":"أنّ الدعوةَ إلى الله هي مفتاح كلّ الأعمال.",
+"التكوير":"الدعوةُ إلى الاستقامة من خلال وضوح العمل.",
+"الانفطار":"شمولُ العمل وتنوّعه ليكون عنوانَ التصديق أو التكذيب بالدِّين.",
+"المطففين":"ضبط موازين العمل والعاملين.",
+"الانشقاق":"أنّ صدق دافعيّة الإنسان وباعثِه للعمل هو إيمانه بالله.",
+"البروج":"أنّ الثبات والاستقامة سبيلٌ لرفع الدرجات.",
+"الطارق":"القوّة والحفظ.",
+"الأعلى":"منهجُ صناعة الإنسانِ الأعلى.",
+"الغاشية":"أنّ قيمة الإنسان وشخصيّته تظهر من خلال عمله الذي يغشاه فيدلّ عليه في الدنيا والآخرة.",
+"الفجر":"أنّ اليقين بأنّ العاقبة للمؤمنين المصدّقين يصنع التفاؤل والأمل والثقة التي تدفع إلى العمل.",
+"البلد":"معرفةُ الإنسانِ بقدراته لتمكين نفسه وتجاوزِ العقبات.",
+"الشمس":"حقيقةُ النفسِ وقوّتها بتزكيتها وتمكين علاقتها بالله؛ تسويةُ النفس واستعدادها للاختيار والعمل والتغيير.",
+"الليل":"ضبطُ اختلافِ سعيِ النّاسِ وتوجُّهِهِم في أعمالهم.",
+"الضحى":"أنّ رعاية الله وتأييده ونُصرته تمنحك الإيجابيّة وتُخلّصك من ضعفك وتدفعك للحركة والنشاط والفاعليّة.",
+"الشرح":"أنّ عطاء الله وتأييده دافعٌ إيجابيٌّ للاستمراريّة في العمل وضبطِ التوجّه إليه في الأعمال والمقاصد.",
+"التين":"أنّ إحسان تقويمِ الإنسان يتحقّق بتحقيق حُسنِ صِلته بالله (واتّباعِ الدّينِ القَيّم).",
+"العلق":"منهجُ مقاومة الطغيان عند الإنسان بتحقيق حسنِ تعلّقه بالله.",
+"القدر":"أنّ قدر الإنسان يتحقّق باتّباعه للقرآن.",
+"البينة":"أنّ الحقَّ يحتاج وضوحَ الحجّة والبيّنة ليتّخذَ الإنسانُ موقفَهُ منه، فينفكَّ عن القِيم والسلوكيّات السلبيّة ويتعلّقَ بالإيجابيّة.",
+"الزلزلة":"أنّ الإنسان يُقرّر مصيره في الآخرة بناءً على عمله في الدنيا.",
+"العاديات":"أثرُ وضوح موقف الإنسان في قوّة عمله وتحقّق نتيجته.",
+"القارعة":"الدعوةُ إلى ضبط العمل وإتقانه بحسب موازينه يوم القيامة.",
+"التكاثر":"التحذير من القوّة السلبيّة التي تلهي الإنسان عن أمرِ الله.",
+"العصر":"بيانُ منهجِ القرآنِ في تحقيقِ نجاةِ الإنسانِ من الخسرانِ.",
+"الهمزة":"التحذيرُ من المعوّقاتِ التي تُثبّط وتُحبِط الإنسانَ عن العملِ وتُحطّم إرادتَه.",
+"الفيل":"التحذيرُ من الصدِّ عن الحقِّ، وبيانُ عاقبةِ من يَصدُّ عن دينِ الله.",
+"قريش":"التنويهُ لأهميّةِ استقرارِ المجتمعاتِ وتحقّقِ أمنِها وأمانِها بالإيمانِ والطاعةِ.",
+"الماعون":"الدعوةُ إلى التديّنِ السليمِ بفهمِ حقيقةِ الدِّين.",
+"الكوثر":"أنّ عطاءَ اللهِ لكَ يمنحُكَ الإيجابيّةَ للعملِ والثقةَ بوعودِه سبحانَه.",
+"الكافرون":"وضوحُ تصوّراتِ المسلمِ وأثرُها على ثباتِه في إيمانِه ومواقفِه.",
+"النصر":"أنّ عاقبةَ ثباتِ المؤمنِ واستقامتِه وسلوكهِ هي النصرُ والتمكينُ.",
+"المسد":"الثقةُ بالتمكينِ لهذا الدِّينِ مهما كانت جهودُ أعدائِه في الصدِّ عنه، فإنّ أعمالَهم إلى هباءٍ.",
+"الإخلاص":"تأكيدُ حقيقةِ الإيمانِ، وأثرُه في صدقِ منهجِ المسلمِ وعملِه.",
+"الفلق":"التنبيهُ على المعوّقاتِ الخارجيّةِ التي تصدّ وتمنعُ عن العمل.",
+"الناس":"التنبيهُ على المعوّقاتِ الذاتيّةِ التي تُعيقُ المسلمَ عن تحقيقِ مشروعِه الإيمانيّ."
+};
+
+const groupOf = k => GROUPS.find(g => k >= g.from && k <= g.to);
+const ar = n => n.toLocaleString('ar-EG');
+const norm = s => s.replace(/[\u064B-\u065F\u0670]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/ؤ/g,'و').replace(/ئ/g,'ي').toLowerCase();
+
+/* ---------- SVG wheel ---------- */
+const NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('wheel');
+const el = (tag, attrs={}, parent=svg) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+const pt = (r, a) => { const t = a*Math.PI/180; return [500 + r*Math.sin(t), 500 - r*Math.cos(t)]; };
+function arc(r1, r2, a0, a1, gap=.35){
+  a0 += gap; a1 -= gap;
+  const large = (a1-a0) > 180 ? 1 : 0;
+  const [x1,y1]=pt(r2,a0),[x2,y2]=pt(r2,a1),[x3,y3]=pt(r1,a1),[x4,y4]=pt(r1,a0);
+  return `M${x1} ${y1}A${r2} ${r2} 0 ${large} 1 ${x2} ${y2}L${x3} ${y3}A${r1} ${r1} 0 ${large} 0 ${x4} ${y4}Z`;
+}
+function label(parent, r, aMid, lines){
+  const [x,y] = pt(r, aMid);
+  let rot = aMid; if (aMid > 90 && aMid < 270) rot += 180;
+  const lh = lines.reduce((m,l)=>Math.max(m,l.size),0) * 1.3;
+  lines.forEach((l,i) => {
+    const t = el('text', {transform:`translate(${x} ${y}) rotate(${rot})`, y:((i-(lines.length-1)/2)*lh).toFixed(1), 'font-size':l.size, class:l.cls||''}, parent);
+    t.textContent = l.t;
+  });
+}
+
+const RING = {r1:[100,200], r2:[204,336], r3:[340,472]};
+el('circle', {cx:500, cy:500, r:492, class:'orbit'});
+
+const segs = [];   // {node, ring, k, g}
+const dots = {};
+
+function mkSeg(ring, a0, a1, group, k, idx){
+  const g = el('g', {class:`seg ${ring}`, tabindex:0, role:'button'});
+  g.style.setProperty('--h', group.h);
+  g.style.setProperty('--i', idx);
+  const [ri, ro] = RING[ring];
+  el('path', {d:arc(ri, ro, a0, a1)}, g);
+  g.dataset.g = group.id; if (k) g.dataset.k = k;
+  segs.push({node:g, ring, k, g:group.id});
+  return g;
+}
+
+// ring 1 — الأقسام الأربعة
+GROUPS.forEach((gr, i) => {
+  const a0 = (gr.from-1)*18, a1 = gr.to*18, mid = (a0+a1)/2;
+  const n = mkSeg('r1', a0, a1, gr, 0, i);
+  n.setAttribute('aria-label', gr.name);
+  label(n, 150, mid, [{t:gr.name, size:21, cls:'t-name'}, {t:gr.range, size:13, cls:'t-sm'}]);
+  const act = () => selectGroup(gr.id);
+  n.addEventListener('click', act); n.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); act(); } });
+});
+
+// ring 2 & 3 — المفاتيح والسور
+KEYS.forEach((key, i) => {
+  const gr = groupOf(key.n), a0 = i*18, a1 = a0+18, mid = a0+9;
+  const act = () => selectKey(key.n);
+  const n2 = mkSeg('r2', a0, a1, gr, key.n, 4+i);
+  n2.setAttribute('aria-label', 'المفتاح ' + ORD[i]);
+  label(n2, 270, mid, [{t:'المفتاح', size:11, cls:'t-sm'}, {t:ar(key.n), size:34, cls:'t-num'}]);
+  const [dx,dy] = pt(322, mid);
+  dots[key.n] = el('circle', {cx:dx, cy:dy, r:4.5, class:'vdot'}, n2);
+
+  const n3 = mkSeg('r3', a0, a1, gr, key.n, 6+i);
+  n3.setAttribute('aria-label', 'سور المفتاح ' + ORD[i]);
+  const s = key.w || key.s;
+  const lines = s.length <= 2 ? s.map(t => ({t, size:15, cls:'t-sm'}))
+    : [{t:s[0], size:14, cls:'t-sm'}, {t:'⋮', size:14, cls:'t-sm'}, {t:s[s.length-1], size:14, cls:'t-sm'}];
+  label(n3, 406, mid, lines);
+  [n2,n3].forEach(n => { n.addEventListener('click', act); n.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); act(); } }); });
+});
+
+// center
+const core = el('g', {id:'core', tabindex:0, role:'button', 'aria-label':'المفتاح المركزي'});
+el('circle', {cx:500, cy:500, r:94, class:'disc'}, core);
+[['المفتاح',500-26,22],['المركزي',500-2,22],['سورة الفاتحة',500+30,14]].forEach(([t,y,s],i)=>{
+  const tx = el('text', {x:500, y, 'font-size':s, 'font-family':i<2?'Amiri, serif':'Tajawal, sans-serif', 'font-weight':i<2?700:500, 'dominant-baseline':'central', fill: i<2?'#f2ead8':'#d9b45a'}, core);
+  tx.textContent = t;
+});
+core.addEventListener('click', () => selectCenter());
+core.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); selectCenter(); } });
+
+/* ---------- chips ---------- */
+const chipsBox = document.getElementById('chips');
+GROUPS.forEach(g => {
+  const b = document.createElement('button');
+  b.className = 'chip'; b.dataset.g = g.id; b.style.setProperty('--h', g.h);
+  b.innerHTML = `<i></i>${g.name} <span style="opacity:.7">(${g.range})</span>`;
+  b.onclick = () => selectGroup(g.id);
+  chipsBox.appendChild(b);
+});
+
+/* ---------- state & panel ---------- */
+const panel = document.getElementById('panel');
+const state = {mode:'home', k:null, g:null, match:null};
+let visited = new Set();
+try { visited = new Set(JSON.parse(localStorage.getItem('qw_visited') || '[]')); } catch(e){}
+const setHash = h => { try { history.replaceState(null,'', h || (location.pathname + location.search)); } catch(e){} };
+const saveVisited = () => { try { localStorage.setItem('qw_visited', JSON.stringify([...visited])); } catch(e){} };
+
+function paintClasses(){
+  segs.forEach(({node, ring, k, g}) => {
+    const selKey = state.mode==='key' && ring!=='r1' && k===state.k;
+    const selGrp = ring==='r1' && state.g===g && state.mode!=='home' && state.mode!=='center';
+    node.classList.toggle('sel', selKey || selGrp);
+    node.classList.toggle('faded', !!state.g && state.mode!=='home' && state.mode!=='center' && g!==state.g);
+    let dim = false;
+    if (state.match) dim = ring==='r1' ? !KEYS.some(x => groupOf(x.n).id===g && state.match.has(x.n)) : !state.match.has(k);
+    node.classList.toggle('dim', dim);
+  });
+  Object.entries(dots).forEach(([k,d]) => d.classList.toggle('on', visited.has(+k)));
+  document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.g===state.g && state.mode==='group'));
+}
+
+function homeHTML(){
+  return `<div>
+    <span class="kicker"><i style="background:var(--gold)"></i>ابدأ من هنا</span>
+    <h2>اختر مفتاحاً من الدائرة</h2>
+    <p class="text">في قلب المخطط سورة الفاتحة، وحولها أربعة أقسام من القرآن، وفي كل قسم مفاتيح تبيّن كيف يُبنى الإنسان. اضغط على أي قطعة لقراءة المفتاح وسوره، أو جرّب «الجولة التلقائية».</p>
+    <p class="progress">المفاتيح التي قرأتها: ${ar(visited.size)} من ${ar(20)}</p>
+  </div>`;
+}
+function centerHTML(){
+  return `<div style="--h:45">
+    <span class="kicker"><i style="background:var(--gold)"></i>مركز المخطط</span>
+    <h2>${CENTER.title}</h2>
+    <p class="text">${CENTER.text}</p>
+    <h3>أقسام القرآن حول المركز</h3>
+    <div class="klist">${GROUPS.map(g=>`<button data-g="${g.id}"><b>◈</b><span>${g.name} — ${g.range}</span></button>`).join('')}</div>
+  </div>`;
+}
+function groupHTML(g){
+  return `<div style="--h:${g.h}">
+    <span class="kicker"><i></i>${g.range}</span>
+    <h2>${g.name}</h2>
+    <p class="text">${g.goal}</p>
+    <h3>مفاتيح هذا القسم</h3>
+    <div class="klist">${KEYS.filter(k=>k.n>=g.from&&k.n<=g.to).map(k=>`<button data-k="${k.n}"><b>${ar(k.n)}</b><span>${k.text}</span></button>`).join('')}</div>
+  </div>`;
+}
+function keyHTML(k){
+  const g = groupOf(k.n);
+  return `<div style="--h:${g.h}">
+    <span class="kicker"><i></i>${g.name} · ${g.range}</span>
+    <h2>المفتاح ${ORD[k.n-1]}</h2>
+    <p class="text">${k.text}</p>
+    <h3>قيمة كل سورة</h3>
+    <div class="svs">${k.s.map(s=>`<div class="sv"><b>سورة ${s}</b><p>${VAL[s]||''}</p></div>`).join('')}</div>
+    <div class="nav">
+      <button class="btn" data-go="-1">السابق</button>
+      <button class="btn" data-go="1">التالي</button>
+    </div>
+    <p class="progress">المفاتيح التي قرأتها: ${ar(visited.size)} من ${ar(20)}</p>
+  </div>`;
+}
+function render(){
+  panel.scrollTop = 0;
+  panel.innerHTML = state.mode==='key' ? keyHTML(KEYS[state.k-1])
+    : state.mode==='group' ? groupHTML(GROUPS.find(g=>g.id===state.g))
+    : state.mode==='center' ? centerHTML() : homeHTML();
+  panel.querySelectorAll('[data-k]').forEach(b => b.onclick = () => selectKey(+b.dataset.k));
+  panel.querySelectorAll('[data-g]').forEach(b => b.onclick = () => selectGroup(b.dataset.g));
+  panel.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { stopTour(); step(+b.dataset.go); });
+  paintClasses();
+}
+function reveal(quiet){
+  if (!quiet && window.matchMedia('(max-width:900px)').matches) panel.scrollIntoView({behavior:'smooth', block:'start'});
+}
+function selectKey(n, quiet){
+  state.mode='key'; state.k=n; state.g=groupOf(n).id;
+  visited.add(n); saveVisited(); render();
+  setHash('#k'+n); reveal(quiet);
+}
+function selectGroup(id){
+  state.mode='group'; state.g=id; state.k=null; render();
+  setHash('#'+id); reveal(false);
+}
+function selectCenter(){
+  state.mode='center'; state.g=null; state.k=null; render();
+  setHash('#center'); reveal(false);
+}
+function clearSel(){
+  state.mode='home'; state.k=null; state.g=null; render();
+  setHash('');
+}
+function step(d){
+  const cur = state.k || (d>0 ? 0 : 21);
+  selectKey(((cur-1+d+20)%20)+1, true);
+}
+
+/* ---------- search ---------- */
+const q = document.getElementById('q');
+q.addEventListener('input', () => {
+  const v = norm(q.value.trim());
+  if (!v) state.match = null;
+  else {
+    state.match = new Set(KEYS.filter(k => norm(k.text + ' ' + k.s.map(x => x + ' ' + (VAL[x]||'')).join(' ') + ' ' + groupOf(k.n).name + ' ' + ORD[k.n-1]).includes(v)).map(k=>k.n));
+    const first = [...state.match][0];
+    if (first && state.match.size===1) selectKey(first, true);
+  }
+  paintClasses();
+});
+
+/* ---------- tour ---------- */
+const tourBtn = document.getElementById('tour');
+let timer = null;
+function stopTour(){ if(timer){ clearInterval(timer); timer=null; } tourBtn.setAttribute('aria-pressed','false'); tourBtn.textContent='جولة تلقائية'; }
+function startTour(){
+  tourBtn.setAttribute('aria-pressed','true'); tourBtn.textContent='إيقاف الجولة';
+  if (!state.k) selectKey(1, true); 
+  timer = setInterval(() => step(1), 6500);
+}
+tourBtn.onclick = () => timer ? stopTour() : startTour();
+
+/* ---------- keyboard & start ---------- */
+document.addEventListener('keydown', e => {
+  if (e.target === q) { if (e.key==='Escape') { q.value=''; q.dispatchEvent(new Event('input')); } return; }
+  if (e.key==='ArrowLeft') { stopTour(); step(1); }
+  else if (e.key==='ArrowRight') { stopTour(); step(-1); }
+  else if (e.key==='Escape') { stopTour(); clearSel(); }
+});
+svg.addEventListener('click', e => { if (e.target === svg) { stopTour(); clearSel(); } });
+
+(function init(){
+  const h = location.hash.slice(1);
+  render();
+  if (/^k\d+$/.test(h) && +h.slice(1)>=1 && +h.slice(1)<=20) selectKey(+h.slice(1), true);
+  else if (GROUPS.some(g=>g.id===h)) selectGroup(h);
+  else if (h==='center') selectCenter();
+})();
+</script>
+</body>
+</html>
